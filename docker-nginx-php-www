@@ -1,0 +1,8 @@
+1 运行php-fpm:
+docker run -p 9000:9000 --name  php-fpm -v $PWD/www:/www -d php:7-fpm
+2 运行nginx:
+docker run -p 80:80 --name nginx -v $PWD/www:/www -v $PWD/nginx/conf.d:/etc/nginx/conf.d -v $PWD/nginx/log:/nginx/log  -d nginx
+注意nginx配置文件的fastcgi_pass ip地址修改为php容器的地址
+
+3 配置本地hosts
+127.0.0.1 hostname

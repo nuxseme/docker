@@ -1,0 +1,5 @@
+1 开放端口22
+
+2 /etc/ssh/sshd_config 已设置默认值。也可指定挂载
+
+3 /root/.ssh/authorized_keys  需要挂载，复制主机公钥

@@ -1,0 +1,85 @@
+server {
+    charset utf-8;
+    client_max_body_size 128M;
+
+    listen 80; ## listen for ipv4
+
+    server_name nuxse.local.xiaoman.cn;
+    root        /www/php-crm/;
+    index       web/dist/index.html;
+
+    access_log  /www/php-crm/protected/runtime/access.log;
+    error_log  /www/php-crm/protected/runtime/error.log;
+
+
+    location / {
+        try_files /web/dist/$uri /web/dist/index.html 404;
+    }
+
+    location ~ \.(txt|xml|js|vue|css|ttf)$ {
+        try_files /web/dist/$uri /web/dist/index.html 404;
+        expires 7d;
+    }
+
+    location ~ \.(jpg|jpeg|gif|png|ico)$ {
+        #try_files /web/dist/$uri /web/dist/index.html 404;
+        expires 30m;
+    }
+
+    location /protected {
+        deny  all;
+    }
+
+    location ~ \.php$ {
+       add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
+        add_header 'Access-Control-Allow-Origin' "$http_origin";
+        add_header 'Access-Control-Allow-Credentials' "true";
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+        fastcgi_param REQUEST_URI $php_url?$args;
+        fastcgi_param REAL_REQUEST_URI $request_uri;
+        fastcgi_pass   172.17.0.2:9000;
+        try_files $uri =404;
+    }
+
+    location ~ /\.(ht|svn|git) {
+        deny all;
+    }
+
+    location ~* ^/api(/.*)$ {
+        set $php_url $1;
+        try_files $uri $uri/ /index-test.php?$args;
+    }
+
+    location /interface {
+        set $php_url $request_uri;
+        try_files $uri $uri/ /index-test.php?$args;
+    }
+
+    location /track {
+        set $php_url $request_uri;
+        try_files $uri $uri/ /index-test.php?$args;
+    }
+
+    location /app {
+        set $php_url $request_uri;
+        try_files $uri $uri/ /index-test.php?$args;
+    }
+    location ^~ /prometheus {
+	set $php_url $request_uri;
+	try_files /web/$uri /index-test.php?$args;
+    } 
+
+    location ^~ /gii {
+	set $php_url $request_uri;
+	try_files $uri $uri/ /index-test.php?$args;
+    }
+    location ^~ /assets {
+	try_files $uri $uri/;		
+    }
+
+
+}
