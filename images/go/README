@@ -1,0 +1,12 @@
+1 生成镜像时已经内置了一份默认的redis.conf 按需修改此文件 或者在启动容器的时候重新挂载配置
+  -v redis.conf:/etc/redis.conf
+
+2 镜像已内置启动redis-server 命令，不需要重新写入， 如需重新指定 eg:docker run -d container redis-server 覆盖CMD 指令
+
+3 开放端口6379
+
+4 配置文件daemonize no 确保容器运行之后不会退出
+  protected_mod no 外部可连接容器redis-sever
+  bind '' 外部可连接容器redis-sever
+
+
