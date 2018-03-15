@@ -21,15 +21,15 @@ RUN yum update -y \
 && rpm -ihv w3m-0.5.3-36.git20180125.el7.x86_64.rpm \
 && rm -rf gc-7.2d-7.el7.x86_64.rpm perl-NKF-2.1.3-5.el7.x86_64.rpm epel-release-7-11.noarch.rpm w3m-0.5.3-36.git20180125.el7.x86_64.rpm \
 #git-completion
-&& wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash \
+&& wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o /root/.git-completion.bash \
 #ssh
 &&  mkdir /root/.ssh \
 &&  ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 #复制外部的sshd_config文件
 ADD sshd_config /etc/ssh/
 ADD authorized_keys /root/.ssh/
-ADD bash_profile ~/.bash_profile
-ADD profile ~/profile
+ADD bash_profile /root/.bash_profile
+ADD profile/ /root/profile/
 
 
 EXPOSE 22
