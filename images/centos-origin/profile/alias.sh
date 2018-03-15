@@ -1,4 +1,4 @@
-alias ll='ls -alh'
+alias ll='ls -alh --color=auto'
 alias ls='ls -ah'
 alias vi='vim'
 alias cl='clear'
