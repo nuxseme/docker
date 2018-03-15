@@ -1,0 +1,52 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+#git显示分支信息
+
+function git_branch {
+  branch="`git branch 2>/dev/null | grep "^\*" | sed -e "s/^\*\ //"`"
+  if [ "${branch}" != "" ];then
+      if [ "${branch}" = "(no branch)" ];then
+          branch="(`git rev-parse --short HEAD`...)"
+      fi
+      echo "($branch)"
+  fi
+}
+
+
+# 引入自定义配置文件
+my_profile_dir=$HOME/profile
+if [ -d "$my_profile_dir" ];then
+	# 指定配置文件必须以.sh后缀
+	for i in $my_profile_dir/*.sh ; do
+        	if [ -r "$i" ]; then
+                	if [ "${-#*i}" != "$-" ];then
+                        	. "$i"
+                	else
+				echo $i
+                        	. "$i" > /dev/null 2>&1
+				echo $PATH
+                	fi
+        	fi
+	done
+	unset i
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+export PS1
+
+if brew list | grep coreutils > /dev/null ; then
+  PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+  alias ls='ls -F --show-control-chars --color=auto'
+  eval `gdircolors -b $HOME/.dir_colors`
+fi
+
+source ~/.git-completion.bash
