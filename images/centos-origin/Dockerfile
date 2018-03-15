@@ -29,6 +29,7 @@ RUN yum update -y \
 ADD sshd_config /etc/ssh/
 ADD authorized_keys /root/.ssh/
 ADD bash_profile /root/.bash_profile
+ADD dir_colors /root/.dir_colors
 ADD profile/ /root/profile/
 
 
